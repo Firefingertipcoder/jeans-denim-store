@@ -111,13 +111,13 @@ export const ShopByFit: React.FC<ShopByFitProps> = ({ config, onSelectFit, onOpe
           </button>
         </div>
 
-        {/* Fit Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-gray-100">
+        {/* Fit Cards: Horizontal Scroll on Mobile, Grid on Tablet/Desktop */}
+        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-0 overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 scrollbar-none sm:border-t sm:border-l border-gray-100 snap-x">
           {FIT_CARDS.map((card) => (
             <div
               key={card.id}
               onClick={() => onSelectFit(card.name, card.gender)}
-              className="group bg-white border-r border-b border-gray-100 overflow-hidden cursor-pointer flex flex-col justify-between relative transition-colors hover:bg-[#FAFAFA]"
+              className="min-w-[240px] max-w-[260px] sm:min-w-0 sm:max-w-none snap-start group bg-white border sm:border-0 sm:border-r sm:border-b border-gray-100 overflow-hidden cursor-pointer flex flex-col justify-between relative transition-colors hover:bg-[#FAFAFA]"
             >
               {/* Image Container */}
               <div className="relative aspect-4/3 overflow-hidden bg-gray-100">
@@ -130,40 +130,40 @@ export const ShopByFit: React.FC<ShopByFitProps> = ({ config, onSelectFit, onOpe
                 
                 {/* Badge on top left */}
                 <div 
-                  className="absolute top-4 left-4 text-white text-[9px] font-black uppercase px-2.5 py-1 tracking-widest"
+                  className="absolute top-3 left-3 text-white text-[9px] font-black uppercase px-2 py-0.5 tracking-widest"
                   style={{ backgroundColor: config.primaryColor }}
                 >
                   {card.gender}
                 </div>
 
                 {/* Model Code Overlay at bottom */}
-                <div className="absolute bottom-4 left-4 right-4 text-white z-20">
-                  <span className="text-[9px] font-bold text-gray-300 uppercase tracking-widest block">Fit Spec: {card.name}</span>
-                  <h3 className="text-xl font-black uppercase tracking-tight text-white">{card.code}</h3>
+                <div className="absolute bottom-3 left-3 right-3 text-white z-20">
+                  <span className="text-[8px] font-bold text-gray-300 uppercase tracking-widest block">Fit: {card.name}</span>
+                  <h3 className="text-base sm:text-lg font-black uppercase tracking-tight text-white">{card.code}</h3>
                 </div>
               </div>
 
               {/* Card Footer Details */}
-              <div className="p-6 bg-white flex-1 flex flex-col justify-between">
+              <div className="p-3.5 sm:p-5 bg-white flex-1 flex flex-col justify-between">
                 <div>
-                  <p className="text-xs text-gray-500 mb-4 font-normal leading-relaxed">{card.tagline}</p>
+                  <p className="text-[11px] text-gray-500 mb-2.5 font-normal leading-relaxed line-clamp-1 sm:line-clamp-none">{card.tagline}</p>
                   
                   {/* Silhouette Specs */}
-                  <div className="grid grid-cols-2 gap-3 text-[11px] bg-[#F8F8F8] p-3 border border-gray-100 mb-4">
+                  <div className="grid grid-cols-2 gap-2 text-[10px] bg-[#F8F8F8] p-2 border border-gray-100 mb-3">
                     <div>
-                      <span className="text-gray-400 font-bold block uppercase text-[9px] tracking-wider">Waist & Rise</span>
-                      <span className="font-bold text-black text-xs">{card.rise}</span>
+                      <span className="text-gray-400 font-bold block uppercase text-[8px] tracking-wider">Rise</span>
+                      <span className="font-bold text-black text-[10px]">{card.rise}</span>
                     </div>
                     <div>
-                      <span className="text-gray-400 font-bold block uppercase text-[9px] tracking-wider">Leg Opening</span>
-                      <span className="font-bold text-black text-xs">{card.leg}</span>
+                      <span className="text-gray-400 font-bold block uppercase text-[8px] tracking-wider">Leg Opening</span>
+                      <span className="font-bold text-black text-[10px]">{card.leg}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-black group-hover:text-[#E11D48] pt-3 border-t border-gray-100 transition-colors">
+                <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-black group-hover:text-[#E11D48] pt-2 border-t border-gray-100 transition-colors">
                   <span>Shop {card.name}</span>
-                  <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3 h-3 transform group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
             </div>

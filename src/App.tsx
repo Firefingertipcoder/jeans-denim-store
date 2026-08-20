@@ -27,7 +27,7 @@ import { DenimCareGuide } from './components/DenimCareGuide';
 import { Footer } from './components/Footer';
 
 // Icons
-import { Sparkles, Zap, Shield, Truck, Award } from 'lucide-react';
+import { Sparkles, Zap, Shield, Truck, Award, Home, Compass, Heart, ShoppingBag, HelpCircle } from 'lucide-react';
 
 const STORAGE_KEY_CONFIG = 'denim_store_brand_config';
 const STORAGE_KEY_PRODUCTS = 'denim_store_products';
@@ -238,7 +238,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col font-sans selection:bg-[#E11D48] selection:text-white">
+    <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col font-sans selection:bg-[#E11D48] selection:text-white pb-16 md:pb-0">
       {/* Toast Notification Bar */}
       {toastMessage && (
         <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-black text-white text-[11px] font-black uppercase tracking-widest py-2.5 px-6 shadow-2xl border border-gray-800">
@@ -273,24 +273,24 @@ export default function App() {
         }}
       />
 
-      {/* Promotional Value Ribbon */}
-      <section className="bg-[#F5F5F5] py-4 border-y border-gray-100 text-[#1A1A1A] text-xs">
-        <div className="w-full px-6 lg:px-10 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div className="flex items-center justify-center space-x-2">
-            <Truck className="w-4 h-4 text-[#E11D48] flex-shrink-0" />
-            <span className="font-bold uppercase tracking-wider text-[10px]">Free Delivery Above {config.currencySymbol}{config.freeShippingThreshold}</span>
+      {/* Promotional Value Ribbon: Clean 1-line marquee/scroll on mobile, 4-col on desktop */}
+      <section className="bg-[#F5F5F5] py-2.5 sm:py-3.5 border-y border-gray-200 text-[#1A1A1A] text-xs overflow-hidden">
+        <div className="w-full px-4 lg:px-10 flex sm:grid sm:grid-cols-4 gap-6 sm:gap-4 overflow-x-auto sm:overflow-x-visible whitespace-nowrap scrollbar-none text-center">
+          <div className="flex items-center justify-center space-x-1.5 flex-shrink-0">
+            <Truck className="w-3.5 h-3.5 text-[#E11D48] flex-shrink-0" />
+            <span className="font-bold uppercase tracking-wider text-[9px] sm:text-[10px]">Free Delivery Above {config.currencySymbol}{config.freeShippingThreshold}</span>
           </div>
-          <div className="flex items-center justify-center space-x-2">
-            <Shield className="w-4 h-4 text-[#E11D48] flex-shrink-0" />
-            <span className="font-bold uppercase tracking-wider text-[10px]">15-Day Returns & Exchanges</span>
+          <div className="flex items-center justify-center space-x-1.5 flex-shrink-0">
+            <Shield className="w-3.5 h-3.5 text-[#E11D48] flex-shrink-0" />
+            <span className="font-bold uppercase tracking-wider text-[9px] sm:text-[10px]">15-Day Returns & Exchanges</span>
           </div>
-          <div className="flex items-center justify-center space-x-2">
-            <Award className="w-4 h-4 text-[#E11D48] flex-shrink-0" />
-            <span className="font-bold uppercase tracking-wider text-[10px]">Authentic Heavyweight Denim</span>
+          <div className="flex items-center justify-center space-x-1.5 flex-shrink-0">
+            <Award className="w-3.5 h-3.5 text-[#E11D48] flex-shrink-0" />
+            <span className="font-bold uppercase tracking-wider text-[9px] sm:text-[10px]">Heavyweight Streetwear Denim</span>
           </div>
-          <div className="flex items-center justify-center space-x-2">
-            <Zap className="w-4 h-4 text-[#E11D48] flex-shrink-0" />
-            <span className="font-bold uppercase tracking-wider text-[10px]">Code FIRST500 for Flat ₹500 Off</span>
+          <div className="flex items-center justify-center space-x-1.5 flex-shrink-0">
+            <Zap className="w-3.5 h-3.5 text-[#E11D48] flex-shrink-0" />
+            <span className="font-bold uppercase tracking-wider text-[9px] sm:text-[10px]">Code FIRST500 for Flat ₹500 Off</span>
           </div>
         </div>
       </section>
@@ -343,18 +343,79 @@ export default function App() {
         onOpenCustomizer={() => setIsCustomizerOpen(true)}
       />
 
-      {/* Floating Action Button: Quick Brand Studio */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end space-y-2">
+      {/* Floating Action Button: Quick Brand Studio (Desktop) */}
+      <div className="hidden md:flex fixed bottom-6 right-6 z-40 flex-col items-end space-y-2">
         <button
           id="floating-brand-customizer-btn"
           onClick={() => setIsCustomizerOpen(true)}
           className="px-4 py-3 bg-black text-white shadow-2xl hover:bg-[#E11D48] transition-all flex items-center space-x-2 border border-gray-800"
           title="Open Brand Customizer Studio"
         >
-          <Sparkles className="w-4 h-4 text-[#E11D48] group-hover:text-white" />
+          <Sparkles className="w-4 h-4 text-[#CCFF00]" />
           <span className="text-[10px] font-black uppercase tracking-widest">CUSTOM LAB</span>
         </button>
       </div>
+
+      {/* Mobile Sticky Bottom Navigation Bar */}
+      <nav 
+        id="mobile-bottom-nav" 
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-md border-t border-gray-800 text-white px-2 py-2 flex items-center justify-around"
+      >
+        <button 
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors"
+        >
+          <Home className="w-5 h-5" />
+          <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Home</span>
+        </button>
+
+        <button 
+          onClick={() => {
+            const el = document.getElementById('denim-catalog-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }}
+          className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors"
+        >
+          <Compass className="w-5 h-5" />
+          <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Shop</span>
+        </button>
+
+        <button 
+          onClick={() => setIsFitGuideOpen(true)}
+          className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors"
+        >
+          <HelpCircle className="w-5 h-5" />
+          <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Fit Guide</span>
+        </button>
+
+        <button 
+          onClick={() => setIsWishlistOpen(true)}
+          className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors relative"
+        >
+          <Heart className="w-5 h-5" />
+          {wishlistIds.length > 0 && (
+            <span className="absolute top-0 right-1 bg-[#E11D48] text-white text-[8px] font-black w-3.5 h-3.5 flex items-center justify-center">
+              {wishlistIds.length}
+            </span>
+          )}
+          <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Wishlist</span>
+        </button>
+
+        <button 
+          onClick={() => setIsCartOpen(true)}
+          className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors relative"
+        >
+          <ShoppingBag className="w-5 h-5 text-[#CCFF00]" />
+          {cartItems.reduce((a, b) => a + b.quantity, 0) > 0 && (
+            <span className="absolute top-0 right-0 bg-[#CCFF00] text-black text-[8px] font-black w-4 h-4 flex items-center justify-center">
+              {cartItems.reduce((a, b) => a + b.quantity, 0)}
+            </span>
+          )}
+          <span className="text-[9px] font-black uppercase tracking-wider text-[#CCFF00] mt-0.5">Bag</span>
+        </button>
+      </nav>
 
       {/* Modals & Drawers */}
       <ProductDetailModal

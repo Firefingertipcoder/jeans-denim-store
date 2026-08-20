@@ -84,69 +84,60 @@ export const Footer: React.FC<FooterProps> = ({
       </div>
 
       {/* Main Footer Links */}
-      <div className="w-full px-6 lg:px-10 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+      <div className="w-full px-4 sm:px-6 lg:px-10 py-8 sm:py-16">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-10">
           {/* Col 1: Brand Info */}
-          <div className="lg:col-span-2 space-y-4">
-            <BrandLogo config={config} size="lg" />
+          <div className="col-span-2 space-y-3 sm:space-y-4">
+            <BrandLogo config={config} size="md" />
             
-            <p className="text-xs text-gray-400 leading-relaxed max-w-sm">
+            <p className="text-[11px] sm:text-xs text-gray-400 leading-relaxed max-w-sm">
               {config.brandTagline || "Architectural construction. Timeless denim craftsmanship."}
             </p>
 
-            <div className="space-y-1.5 text-xs text-gray-400 pt-2">
+            <div className="space-y-1 text-[11px] sm:text-xs text-gray-400 pt-1">
               <div className="flex items-center space-x-2">
                 <Phone className="w-3.5 h-3.5 text-gray-500" />
                 <span>{config.contactPhone || "1800-1020-501"}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-3.5 h-3.5 text-gray-500" />
-                <span>{config.contactEmail || "customercare@levijeans.store"}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-3.5 h-3.5 text-gray-500" />
-                <span>{config.storeLocationText || "120+ Outlets Nationwide"}</span>
+                <span>{config.contactEmail || "customercare@freakins.store"}</span>
               </div>
             </div>
 
             <button
               onClick={onOpenCustomizer}
-              className="mt-3 inline-flex items-center space-x-1.5 px-3 py-1.5 bg-black hover:bg-[#262626] text-white text-[10px] font-bold uppercase tracking-widest transition-colors border border-gray-700"
+              className="mt-2 inline-flex items-center space-x-1.5 px-3 py-1.5 bg-black hover:bg-[#262626] text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-colors border border-gray-700"
             >
-              <Sparkles className="w-3 h-3 text-[#E11D48]" />
-              <span>CUSTOM LAB</span>
+              <Sparkles className="w-3 h-3 text-[#CCFF00]" />
+              <span>LAUNCH CUSTOM LAB</span>
             </button>
           </div>
 
           {/* Col 2: Men */}
           <div>
-            <h4 className="font-bold text-[10px] uppercase tracking-widest text-gray-400 mb-4 border-b border-gray-800 pb-1">
+            <h4 className="font-bold text-[9px] sm:text-[10px] uppercase tracking-widest text-gray-400 mb-2 sm:mb-4 border-b border-gray-800 pb-1">
               Men's Denim
             </h4>
-            <ul className="space-y-2 text-xs text-gray-400 font-bold uppercase tracking-wider">
+            <ul className="space-y-1.5 text-[11px] sm:text-xs text-gray-400 font-bold uppercase tracking-wider">
               <li>
                 <button onClick={() => onSelectCategory('Men', 'Jeans', 'Straight')} className="hover:text-white transition-colors">
-                  501® Original Straight
+                  501® Original
                 </button>
               </li>
               <li>
                 <button onClick={() => onSelectCategory('Men', 'Jeans', 'Slim')} className="hover:text-white transition-colors">
-                  511™ Slim Jeans
+                  511™ Slim
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectCategory('Men', 'Jeans', 'Slim Taper')} className="hover:text-white transition-colors">
-                  512™ Slim Taper
+                <button onClick={() => onSelectCategory('Men', 'Jeans', 'Cargo & Parachute')} className="hover:text-white transition-colors">
+                  Tactical Cargos
                 </button>
               </li>
               <li>
                 <button onClick={() => onSelectCategory('Men', 'Jackets')} className="hover:text-white transition-colors">
-                  Trucker Jackets
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectCategory('Men', 'Shirts & Tops')} className="hover:text-white transition-colors">
-                  Western Denim Shirts
+                  Truckers
                 </button>
               </li>
             </ul>
@@ -154,46 +145,41 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Col 3: Women */}
           <div>
-            <h4 className="font-bold text-[10px] uppercase tracking-widest text-gray-400 mb-4 border-b border-gray-800 pb-1">
+            <h4 className="font-bold text-[9px] sm:text-[10px] uppercase tracking-widest text-gray-400 mb-2 sm:mb-4 border-b border-gray-800 pb-1">
               Women's Denim
             </h4>
-            <ul className="space-y-2 text-xs text-gray-400 font-bold uppercase tracking-wider">
+            <ul className="space-y-1.5 text-[11px] sm:text-xs text-gray-400 font-bold uppercase tracking-wider">
               <li>
                 <button onClick={() => onSelectCategory('Women', 'Jeans', 'Straight')} className="hover:text-white transition-colors">
                   Ribcage High Rise
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectCategory('Women', 'Jeans', 'Skinny')} className="hover:text-white transition-colors">
-                  711™ Skinny Jeans
-                </button>
-              </li>
-              <li>
                 <button onClick={() => onSelectCategory('Women', 'Jeans', 'Bootcut & Flare')} className="hover:text-white transition-colors">
-                  70s High Flare
+                  70s Flare
                 </button>
               </li>
               <li>
                 <button onClick={() => onSelectCategory('Women', 'Jeans', 'Relaxed / Loose')} className="hover:text-white transition-colors">
-                  Baggy Dad Relaxed
+                  Baggy Skater
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectCategory('Women', 'Jackets')} className="hover:text-white transition-colors">
-                  Ex-Boyfriend Trucker
+                <button onClick={() => onSelectCategory('Women', 'Shirts & Tops', 'Corset & Tops')} className="hover:text-white transition-colors">
+                  Denim Corset
                 </button>
               </li>
             </ul>
           </div>
 
           {/* Col 4: Help & Fit */}
-          <div>
-            <h4 className="font-bold text-[10px] uppercase tracking-widest text-gray-400 mb-4 border-b border-gray-800 pb-1">
-              Care & Help
+          <div className="col-span-2 sm:col-span-1">
+            <h4 className="font-bold text-[9px] sm:text-[10px] uppercase tracking-widest text-gray-400 mb-2 sm:mb-4 border-b border-gray-800 pb-1">
+              Help & Guide
             </h4>
-            <ul className="space-y-2 text-xs text-gray-400 font-bold uppercase tracking-wider">
+            <ul className="space-y-1.5 text-[11px] sm:text-xs text-gray-400 font-bold uppercase tracking-wider">
               <li>
-                <button onClick={onOpenFitGuide} className="hover:text-white transition-colors text-[#E11D48]">
+                <button onClick={onOpenFitGuide} className="hover:text-white transition-colors text-[#CCFF00]">
                   Interactive Fit Guide &rarr;
                 </button>
               </li>
@@ -203,18 +189,8 @@ export const Footer: React.FC<FooterProps> = ({
                 </a>
               </li>
               <li>
-                <a href="#brand-story-heritage-section" className="hover:text-white transition-colors">
-                  Heritage Story
-                </a>
-              </li>
-              <li>
                 <span className="hover:text-white transition-colors cursor-pointer">
-                  Returns & Exchange
-                </span>
-              </li>
-              <li>
-                <span className="hover:text-white transition-colors cursor-pointer">
-                  Track Order
+                  15-Day Exchange
                 </span>
               </li>
             </ul>
@@ -222,22 +198,21 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom Legal & Copyright matching Sleek Interface */}
-        <div className="mt-14 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
-          <div className="text-[11px] font-bold uppercase tracking-widest flex items-center gap-2">
+        <div className="mt-8 sm:mt-14 pt-6 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-3">
+          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest flex items-center gap-2">
             <span>© {new Date().getFullYear()} {config.brandName || "FREAKINS"}. ALL RIGHTS RESERVED.</span>
             <span className="text-gray-600">|</span>
             <span className="text-gray-400">DESIGNED BY S&S PARTNERS</span>
           </div>
 
-          <div className="flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">
+          <div className="flex items-center space-x-4 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">
             <span className="hover:text-white cursor-pointer">Terms</span>
             <span className="hover:text-white cursor-pointer">Privacy</span>
-            <span className="hover:text-white cursor-pointer">Accessibility</span>
             <span className="hover:text-white cursor-pointer">Sustainability</span>
           </div>
 
-          <div className="flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-            <Globe className="w-3.5 h-3.5" />
+          <div className="flex items-center space-x-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-400">
+            <Globe className="w-3 h-3" />
             <span>INDIA ({config.currencyCode})</span>
           </div>
         </div>

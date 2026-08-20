@@ -31,39 +31,39 @@ export const DenimCareGuide: React.FC<DenimCareGuideProps> = ({ config }) => {
   ];
 
   return (
-    <section id="denim-care-guide-section" className="py-14 sm:py-20 bg-stone-100 border-t border-stone-200">
+    <section id="denim-care-guide-section" className="py-8 sm:py-16 bg-[#F9F9F9] border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-xs font-black uppercase tracking-widest text-stone-500">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10">
+          <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-gray-500">
             PRESERVE YOUR INVESTMENT
           </span>
-          <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-stone-900 mt-1">
+          <h2 className="text-xl sm:text-3xl font-black uppercase tracking-tight text-gray-900 mt-0.5">
             HOW TO CARE FOR YOUR DENIM
           </h2>
-          <p className="text-xs sm:text-sm text-stone-600 mt-2">
-            The less you wash raw denim, the better it looks. Follow these golden rules to let your jeans develop personal whiskering, honeycombs, and fades.
+          <p className="text-[11px] sm:text-xs text-gray-600 mt-1 max-w-lg mx-auto">
+            The less you wash raw denim, the better it looks. Follow these golden rules to let your jeans develop personal whiskering and fades.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
           {careSteps.map((step, idx) => {
             const Icon = step.icon;
             return (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-xs border border-stone-200 shadow-2xs flex flex-col justify-between hover:shadow-md transition-shadow"
+                className="bg-white p-3.5 sm:p-5 border border-gray-200 flex flex-col justify-between hover:shadow-sm transition-shadow"
               >
                 <div>
                   <div 
-                    className="w-10 h-10 rounded-xs flex items-center justify-center mb-4 text-white shadow-xs"
+                    className="w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center mb-2.5 text-white"
                     style={{ backgroundColor: config.primaryColor }}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </div>
-                  <h3 className="text-sm font-black uppercase text-stone-900 mb-2">
+                  <h3 className="text-[11px] sm:text-xs font-black uppercase text-gray-900 mb-1">
                     {step.title}
                   </h3>
-                  <p className="text-xs text-stone-600 leading-relaxed font-normal">
+                  <p className="text-[10px] sm:text-xs text-gray-600 leading-relaxed font-normal line-clamp-3 sm:line-clamp-none">
                     {step.desc}
                   </p>
                 </div>
