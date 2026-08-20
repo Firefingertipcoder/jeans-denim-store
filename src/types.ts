@@ -149,3 +149,54 @@ export interface FilterState {
   sortBy: 'featured' | 'price-low' | 'price-high' | 'rating' | 'newest';
   searchQuery: string;
 }
+
+export interface ShippingAddress {
+  fullName: string;
+  phone: string;
+  street: string;
+  city: string;
+  state: string;
+  pincode: string;
+  isDefault?: boolean;
+}
+
+export interface OrderItemSummary {
+  productId: string;
+  productName: string;
+  size: string;
+  colorName: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
+
+export interface UserOrder {
+  id: string;
+  orderNumber: string;
+  date: string;
+  items: OrderItemSummary[];
+  total: number;
+  discount: number;
+  paymentMethod: string;
+  status: 'Processing' | 'Shipped' | 'Out for Delivery' | 'Delivered';
+  shippingAddress: ShippingAddress;
+  estimatedDelivery?: string;
+  trackingNumber?: string;
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  password?: string;
+  phone?: string;
+  gender?: 'Men' | 'Women' | 'Unisex' | 'Prefer not to say';
+  avatar?: string;
+  joinedDate: string;
+  tier: 'SILVER ARCHIVIST' | 'GOLD SELVEDGE' | 'DENIM VIP ICON';
+  points: number;
+  favoriteFit?: DenimFit;
+  defaultWaistSize?: string;
+  savedAddresses: ShippingAddress[];
+  orders: UserOrder[];
+}

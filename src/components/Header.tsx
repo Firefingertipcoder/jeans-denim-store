@@ -14,19 +14,23 @@ import {
   HelpCircle,
   Eye,
   Check,
-  ArrowRight
+  ArrowRight,
+  User
 } from 'lucide-react';
-import { BrandConfig, Gender, Product } from '../types';
+import { BrandConfig, Gender, Product, UserProfile } from '../types';
 import { BrandLogo } from './BrandLogo';
 
 interface HeaderProps {
   config: BrandConfig;
   cartCount: number;
   wishlistCount: number;
+  user: UserProfile | null;
   onOpenCart: () => void;
   onOpenWishlist: () => void;
   onOpenFitGuide: () => void;
   onOpenCustomizer: () => void;
+  onOpenAuth: (mode?: 'login' | 'register') => void;
+  onOpenProfile: () => void;
   isEditMode: boolean;
   onToggleEditMode: () => void;
   onSelectCategory: (gender: Gender, category?: string, fit?: string) => void;
@@ -38,10 +42,13 @@ export const Header: React.FC<HeaderProps> = ({
   config,
   cartCount,
   wishlistCount,
+  user,
   onOpenCart,
   onOpenWishlist,
   onOpenFitGuide,
   onOpenCustomizer,
+  onOpenAuth,
+  onOpenProfile,
   isEditMode,
   onToggleEditMode,
   onSelectCategory,
@@ -115,7 +122,10 @@ export const Header: React.FC<HeaderProps> = ({
               <MapPin className="w-3.5 h-3.5 mr-1 text-gray-400" />
               {config.storeLocationText || "Store Locator"}
             </span>
-            <span className="flex items-center hover:text-black cursor-pointer transition-colors">
+            <span 
+              className="flex items-center hover:text-black cursor-pointer transition-colors"
+              onClick={() => user ? onOpenProfile() : onOpenAuth('login')}
+            >
               <Truck className="w-3.5 h-3.5 mr-1 text-gray-400" />
               Order Status
             </span>
@@ -126,6 +136,35 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="flex items-center space-x-4">
+            {/* User Account / Login Button */}
+            {user ? (
+              <button
+                id="header-top-user-btn"
+                onClick={onOpenProfile}
+                className="inline-flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-widest text-black hover:text-[#E11D48] transition-colors"
+              >
+                <div 
+                  className="w-4 h-4 rounded-full flex items-center justify-center text-[8px] text-white font-black"
+                  style={{ backgroundColor: config.primaryColor }}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <span>Hi, {user.name.split(' ')[0]}</span>
+                <span className="bg-[#CCFF00] text-black text-[7px] font-black px-1 py-0.2">VIP</span>
+              </button>
+            ) : (
+              <button
+                id="header-top-login-btn"
+                onClick={() => onOpenAuth('login')}
+                className="inline-flex items-center space-x-1 text-[10px] font-bold uppercase tracking-widest text-gray-600 hover:text-black transition-colors"
+              >
+                <User className="w-3.5 h-3.5 text-gray-400" />
+                <span>Sign In / Join Club</span>
+              </button>
+            )}
+
+            <span className="text-gray-300">|</span>
+
             {/* Live Brand Customizer Toggle */}
             <button
               id="header-edit-mode-toggle-btn"
@@ -458,8 +497,27 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
-            {/* Wishlist & Cart Icons */}
-            <div className="flex items-center gap-4 text-[#1A1A1A]">
+            {/* User, Wishlist & Cart Icons */}
+            <div className="flex items-center gap-3 sm:gap-4 text-[#1A1A1A]">
+              <button
+                id="header-user-account-btn"
+                onClick={() => user ? onOpenProfile() : onOpenAuth('login')}
+                className="relative p-1 hover:text-[#E11D48] transition-colors flex items-center"
+                aria-label="User Account"
+                title={user ? `Profile (${user.name})` : "Sign In / Register"}
+              >
+                {user ? (
+                  <div 
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-black border border-black/10 shadow-xs"
+                    style={{ backgroundColor: config.primaryColor }}
+                  >
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                ) : (
+                  <User className="w-5 h-5" strokeWidth={1.5} />
+                )}
+              </button>
+
               <button
                 id="header-wishlist-btn"
                 onClick={onOpenWishlist}
@@ -501,6 +559,53 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
         <div id="mobile-navigation-drawer" className="md:hidden border-t border-gray-200 bg-white p-4 space-y-3 shadow-2xl animate-in slide-in-from-top duration-200">
+          {/* Mobile User Profile Section */}
+          <div className="p-3 bg-[#FAFAFA] border border-gray-200 mb-2">
+            {user ? (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2.5">
+                  <div 
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-black"
+                    style={{ backgroundColor: config.primaryColor }}
+                  >
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black uppercase text-black">{user.name}</h4>
+                    <span className="text-[9px] font-bold text-gray-500 uppercase">{user.tier || 'VIP MEMBER'}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => { onOpenProfile(); setIsMobileMenuOpen(false); }}
+                  className="px-2.5 py-1 bg-black text-white text-[9px] font-black uppercase tracking-wider"
+                >
+                  View Profile
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-black uppercase text-black">Member Archive</h4>
+                  <p className="text-[10px] text-gray-500">Sign in to track orders & rewards</p>
+                </div>
+                <div className="flex space-x-1.5">
+                  <button
+                    onClick={() => { onOpenAuth('login'); setIsMobileMenuOpen(false); }}
+                    className="px-2.5 py-1 bg-black text-white text-[9px] font-black uppercase tracking-wider"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => { onOpenAuth('register'); setIsMobileMenuOpen(false); }}
+                    className="px-2.5 py-1 bg-gray-200 text-black text-[9px] font-black uppercase tracking-wider"
+                  >
+                    Register
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="space-y-1">
             <button 
               onClick={() => { onSelectCategory('All', 'Jeans', 'Cargo & Parachute'); setIsMobileMenuOpen(false); }}

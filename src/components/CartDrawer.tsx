@@ -15,17 +15,19 @@ import {
   Smartphone
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { CartItem, BrandConfig } from '../types';
+import { CartItem, BrandConfig, UserProfile, UserOrder } from '../types';
 
 interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   items: CartItem[];
   config: BrandConfig;
+  user?: UserProfile | null;
   onUpdateQuantity: (itemId: string, newQty: number) => void;
   onRemoveItem: (itemId: string) => void;
   onClearCart: () => void;
   onContinueShopping: () => void;
+  onOrderPlaced?: (order: UserOrder) => void;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -33,24 +35,42 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onClose,
   items,
   config,
+  user,
   onUpdateQuantity,
   onRemoveItem,
   onClearCart,
   onContinueShopping,
+  onOrderPlaced,
 }) => {
   const [couponCode, setCouponCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState<{ code: string; amount: number } | null>(null);
   const [couponError, setCouponError] = useState('');
   
   // Checkout Modal State
+  const defaultAddr = user?.savedAddresses?.find(a => a.isDefault) || user?.savedAddresses?.[0];
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [customerAddress, setCustomerAddress] = useState('');
-  const [customerCity, setCustomerCity] = useState('');
-  const [customerPincode, setCustomerPincode] = useState('');
+  const [customerName, setCustomerName] = useState(user?.name || defaultAddr?.fullName || '');
+  const [customerPhone, setCustomerPhone] = useState(user?.phone || defaultAddr?.phone || '');
+  const [customerAddress, setCustomerAddress] = useState(defaultAddr?.street || '');
+  const [customerCity, setCustomerCity] = useState(defaultAddr?.city || '');
+  const [customerPincode, setCustomerPincode] = useState(defaultAddr?.pincode || '');
   const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'cod'>('upi');
+  const [placedOrderNumber, setPlacedOrderNumber] = useState('');
+
+  // Keep state in sync if user changes
+  React.useEffect(() => {
+    if (user && !customerName) {
+      setCustomerName(user.name);
+      if (user.phone) setCustomerPhone(user.phone);
+      const def = user.savedAddresses?.find(a => a.isDefault) || user.savedAddresses?.[0];
+      if (def) {
+        setCustomerAddress(def.street);
+        setCustomerCity(def.city);
+        setCustomerPincode(def.pincode);
+      }
+    }
+  }, [user]);
 
   if (!isOpen) return null;
 
@@ -89,6 +109,41 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     if (!customerName || !customerPhone || !customerAddress) {
       alert('Please fill in your shipping details.');
       return;
+    }
+
+    const newOrderNumber = `FRK-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+    setPlacedOrderNumber(newOrderNumber);
+
+    if (onOrderPlaced) {
+      const orderObj: UserOrder = {
+        id: 'ord_' + Date.now(),
+        orderNumber: newOrderNumber,
+        date: new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }),
+        items: items.map(it => ({
+          productId: it.product.id,
+          productName: it.product.name,
+          size: it.selectedSize,
+          colorName: it.selectedColor.name,
+          price: it.product.price,
+          quantity: it.quantity,
+          image: it.selectedColor.image,
+        })),
+        total: grandTotal,
+        discount: discountAmount,
+        paymentMethod: paymentMethod === 'upi' ? 'UPI / GPay' : paymentMethod === 'card' ? 'Credit/Debit Card' : 'Cash on Delivery',
+        status: 'Processing',
+        trackingNumber: `TRK-${Math.floor(10000000 + Math.random() * 90000000)}`,
+        estimatedDelivery: '3-4 Business Days',
+        shippingAddress: {
+          fullName: customerName,
+          phone: customerPhone,
+          street: customerAddress,
+          city: customerCity || 'Mumbai',
+          state: 'Maharashtra',
+          pincode: customerPincode || '400001',
+        }
+      };
+      onOrderPlaced(orderObj);
     }
 
     // Fire celebration confetti!

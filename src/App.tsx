@@ -9,7 +9,9 @@ import {
   ProductColor, 
   CartItem, 
   Gender, 
-  DenimFit 
+  DenimFit,
+  UserProfile,
+  UserOrder
 } from './types';
 
 // Components
@@ -25,14 +27,18 @@ import { BrandCustomizer } from './components/BrandCustomizer';
 import { BrandStory } from './components/BrandStory';
 import { DenimCareGuide } from './components/DenimCareGuide';
 import { Footer } from './components/Footer';
+import { AuthModal } from './components/AuthModal';
+import { UserProfileModal } from './components/UserProfileModal';
 
 // Icons
-import { Sparkles, Zap, Shield, Truck, Award, Home, Compass, Heart, ShoppingBag, HelpCircle } from 'lucide-react';
+import { Sparkles, Zap, Shield, Truck, Award, Home, Compass, Heart, ShoppingBag, HelpCircle, User } from 'lucide-react';
 
 const STORAGE_KEY_CONFIG = 'denim_store_brand_config';
 const STORAGE_KEY_PRODUCTS = 'denim_store_products';
 const STORAGE_KEY_CART = 'denim_store_cart';
 const STORAGE_KEY_WISHLIST = 'denim_store_wishlist';
+const STORAGE_KEY_CURRENT_USER = 'denim_store_current_user';
+const STORAGE_KEY_REGISTERED_USERS = 'denim_store_registered_users';
 
 export default function App() {
   // Brand Configuration State with LocalStorage persistence
@@ -55,6 +61,17 @@ export default function App() {
       // ignore
     }
     return INITIAL_PRODUCTS;
+  });
+
+  // User Profile & Authentication State
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_CURRENT_USER);
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return null;
   });
 
   // Cart State
@@ -89,6 +106,9 @@ export default function App() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isFitGuideOpen, setIsFitGuideOpen] = useState(false);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [selectedProductForModal, setSelectedProductForModal] = useState<Product | null>(null);
 
   // Edit Mode state
@@ -113,6 +133,16 @@ export default function App() {
 
   useEffect(() => {
     try {
+      if (user) {
+        localStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(user));
+      } else {
+        localStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+      }
+    } catch {}
+  }, [user]);
+
+  useEffect(() => {
+    try {
       localStorage.setItem(STORAGE_KEY_CART, JSON.stringify(cartItems));
     } catch {}
   }, [cartItems]);
@@ -126,6 +156,53 @@ export default function App() {
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 2500);
+  };
+
+  // Auth & Profile Handlers
+  const handleOpenAuth = (mode: 'login' | 'register' = 'login') => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+  };
+
+  const handleLoginSuccess = (loggedInUser: UserProfile) => {
+    setUser(loggedInUser);
+    showToast(`Welcome back, ${loggedInUser.name.split(' ')[0]}!`);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setIsProfileModalOpen(false);
+    showToast('Signed out successfully');
+  };
+
+  const handleUpdateUser = (updatedUser: UserProfile) => {
+    setUser(updatedUser);
+    
+    // Also sync in registered users list
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY_REGISTERED_USERS);
+      if (stored) {
+        const users: UserProfile[] = JSON.parse(stored);
+        const index = users.findIndex(u => u.id === updatedUser.id);
+        if (index > -1) {
+          users[index] = updatedUser;
+          localStorage.setItem(STORAGE_KEY_REGISTERED_USERS, JSON.stringify(users));
+        }
+      }
+    } catch {}
+    
+    showToast('Profile updated successfully');
+  };
+
+  const handleOrderPlaced = (order: UserOrder) => {
+    if (user) {
+      const updatedUser: UserProfile = {
+        ...user,
+        orders: [order, ...(user.orders || [])],
+        rewardPoints: (user.rewardPoints || 0) + Math.round(order.total * 0.1),
+      };
+      handleUpdateUser(updatedUser);
+    }
   };
 
   // Cart Handlers
@@ -249,12 +326,15 @@ export default function App() {
       {/* Main Header */}
       <Header
         config={config}
+        user={user}
         cartCount={cartItems.reduce((a, b) => a + b.quantity, 0)}
         wishlistCount={wishlistIds.length}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenWishlist={() => setIsWishlistOpen(true)}
         onOpenFitGuide={() => setIsFitGuideOpen(true)}
         onOpenCustomizer={() => setIsCustomizerOpen(true)}
+        onOpenAuth={handleOpenAuth}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
         isEditMode={isEditMode}
         onToggleEditMode={() => setIsEditMode(!isEditMode)}
         onSelectCategory={handleSelectCategory}
@@ -338,9 +418,12 @@ export default function App() {
       {/* Footer */}
       <Footer
         config={config}
+        user={user}
         onSelectCategory={handleSelectCategory}
         onOpenFitGuide={() => setIsFitGuideOpen(true)}
         onOpenCustomizer={() => setIsCustomizerOpen(true)}
+        onOpenAuth={handleOpenAuth}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
       />
 
       {/* Floating Action Button: Quick Brand Studio (Desktop) */}
@@ -362,39 +445,34 @@ export default function App() {
         className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-md border-t border-gray-800 text-white px-2 py-2 flex items-center justify-around"
       >
         <button 
+          id="mobile-nav-home-btn"
           onClick={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors"
         >
-          <Home className="w-5 h-5" />
+          <Home className="w-4.5 h-4.5" />
           <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Home</span>
         </button>
 
         <button 
+          id="mobile-nav-shop-btn"
           onClick={() => {
             const el = document.getElementById('denim-catalog-section');
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }}
           className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors"
         >
-          <Compass className="w-5 h-5" />
+          <Compass className="w-4.5 h-4.5" />
           <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Shop</span>
         </button>
 
         <button 
-          onClick={() => setIsFitGuideOpen(true)}
-          className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors"
-        >
-          <HelpCircle className="w-5 h-5" />
-          <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Fit Guide</span>
-        </button>
-
-        <button 
+          id="mobile-nav-wishlist-btn"
           onClick={() => setIsWishlistOpen(true)}
           className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors relative"
         >
-          <Heart className="w-5 h-5" />
+          <Heart className="w-4.5 h-4.5" />
           {wishlistIds.length > 0 && (
             <span className="absolute top-0 right-1 bg-[#E11D48] text-white text-[8px] font-black w-3.5 h-3.5 flex items-center justify-center">
               {wishlistIds.length}
@@ -404,16 +482,37 @@ export default function App() {
         </button>
 
         <button 
+          id="mobile-nav-bag-btn"
           onClick={() => setIsCartOpen(true)}
           className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors relative"
         >
-          <ShoppingBag className="w-5 h-5 text-[#CCFF00]" />
+          <ShoppingBag className="w-4.5 h-4.5 text-[#CCFF00]" />
           {cartItems.reduce((a, b) => a + b.quantity, 0) > 0 && (
-            <span className="absolute top-0 right-0 bg-[#CCFF00] text-black text-[8px] font-black w-4 h-4 flex items-center justify-center">
+            <span className="absolute top-0 right-0 bg-[#CCFF00] text-black text-[8px] font-black w-3.5 h-3.5 flex items-center justify-center">
               {cartItems.reduce((a, b) => a + b.quantity, 0)}
             </span>
           )}
           <span className="text-[9px] font-black uppercase tracking-wider text-[#CCFF00] mt-0.5">Bag</span>
+        </button>
+
+        <button 
+          id="mobile-nav-profile-btn"
+          onClick={() => user ? setIsProfileModalOpen(true) : handleOpenAuth('login')}
+          className="flex flex-col items-center justify-center p-1 text-gray-400 hover:text-white transition-colors"
+        >
+          {user ? (
+            <div 
+              className="w-4.5 h-4.5 rounded-full flex items-center justify-center text-white text-[9px] font-black"
+              style={{ backgroundColor: config.primaryColor }}
+            >
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+          ) : (
+            <User className="w-4.5 h-4.5" />
+          )}
+          <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">
+            {user ? 'Account' : 'Login'}
+          </span>
         </button>
       </nav>
 
@@ -444,10 +543,12 @@ export default function App() {
         onClose={() => setIsCartOpen(false)}
         items={cartItems}
         config={config}
+        user={user}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveFromCart}
         onClearCart={handleClearCart}
         onContinueShopping={() => setIsCartOpen(false)}
+        onOrderPlaced={handleOrderPlaced}
       />
 
       <WishlistDrawer
@@ -459,6 +560,28 @@ export default function App() {
         onRemoveFromWishlist={handleToggleWishlist}
         onQuickView={(p) => setSelectedProductForModal(p)}
         onAddToCart={(p) => handleAddToCart(p)}
+      />
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        config={config}
+        initialMode={authModalMode}
+        onLoginSuccess={handleLoginSuccess}
+      />
+
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={user}
+        config={config}
+        onUpdateUser={handleUpdateUser}
+        onLogout={handleLogout}
+        onContinueShopping={() => {
+          setIsProfileModalOpen(false);
+          const el = document.getElementById('denim-catalog-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }}
       />
 
       <BrandCustomizer

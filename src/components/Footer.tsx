@@ -11,21 +11,27 @@ import {
   ArrowRight,
   Sparkles
 } from 'lucide-react';
-import { BrandConfig, Gender } from '../types';
+import { BrandConfig, Gender, UserProfile } from '../types';
 import { BrandLogo } from './BrandLogo';
 
 interface FooterProps {
   config: BrandConfig;
+  user?: UserProfile | null;
   onSelectCategory: (gender: Gender, category?: string, fit?: string) => void;
   onOpenFitGuide: () => void;
   onOpenCustomizer: () => void;
+  onOpenAuth?: (mode?: 'login' | 'register') => void;
+  onOpenProfile?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   config,
+  user,
   onSelectCategory,
   onOpenFitGuide,
   onOpenCustomizer,
+  onOpenAuth,
+  onOpenProfile,
 }) => {
   const [emailInput, setEmailInput] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -175,9 +181,18 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 4: Help & Fit */}
           <div className="col-span-2 sm:col-span-1">
             <h4 className="font-bold text-[9px] sm:text-[10px] uppercase tracking-widest text-gray-400 mb-2 sm:mb-4 border-b border-gray-800 pb-1">
-              Help & Guide
+              Help & Account
             </h4>
             <ul className="space-y-1.5 text-[11px] sm:text-xs text-gray-400 font-bold uppercase tracking-wider">
+              <li>
+                <button 
+                  onClick={() => user ? onOpenProfile?.() : onOpenAuth?.('login')}
+                  className="hover:text-white transition-colors flex items-center gap-1.5 text-white"
+                >
+                  <span>{user ? `Account (${user.name.split(' ')[0]})` : 'Member Sign In'}</span>
+                  <span className="bg-[#CCFF00] text-black text-[7px] font-black px-1">VIP</span>
+                </button>
+              </li>
               <li>
                 <button onClick={onOpenFitGuide} className="hover:text-white transition-colors text-[#CCFF00]">
                   Interactive Fit Guide &rarr;
