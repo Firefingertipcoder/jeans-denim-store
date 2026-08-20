@@ -98,24 +98,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             e.stopPropagation();
             onToggleWishlist(product);
           }}
-          className={`absolute top-10 right-3 p-1.5 transition-all ${
+          className={`absolute top-2 sm:top-10 right-2 sm:right-3 p-1.5 transition-all z-20 ${
             isWishlisted
-              ? 'bg-[#E11D48] text-white'
-              : 'bg-white/90 text-gray-700 hover:bg-black hover:text-white opacity-0 group-hover:opacity-100'
+              ? 'bg-[#E11D48] text-white opacity-100'
+              : 'bg-white/90 text-gray-700 hover:bg-black hover:text-white opacity-90 md:opacity-0 md:group-hover:opacity-100 shadow-sm'
           }`}
           aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
         >
           <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-current' : ''}`} />
         </button>
 
-        {/* Quick View Button on hover */}
+        {/* Quick View Button on hover (Desktop) */}
         <button
           id={`quick-view-${product.id}`}
           onClick={(e) => {
             e.stopPropagation();
             onQuickView(product);
           }}
-          className="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#E11D48] transition-colors opacity-0 group-hover:opacity-100 flex items-center space-x-1.5 whitespace-nowrap"
+          className="hidden md:flex absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#E11D48] transition-colors opacity-0 group-hover:opacity-100 items-center space-x-1.5 whitespace-nowrap z-10"
         >
           <Eye className="w-3.5 h-3.5" />
           <span>Quick View</span>

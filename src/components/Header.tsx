@@ -500,52 +500,72 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div id="mobile-navigation-drawer" className="md:hidden border-t border-stone-200 bg-white p-4 space-y-4 shadow-lg animate-in slide-in-from-top duration-200">
-          <div className="space-y-2">
+        <div id="mobile-navigation-drawer" className="md:hidden border-t border-gray-200 bg-white p-4 space-y-3 shadow-2xl animate-in slide-in-from-top duration-200">
+          <div className="space-y-1">
             <button 
-              onClick={() => { onSelectCategory('Men'); setIsMobileMenuOpen(false); }}
-              className="w-full flex items-center justify-between text-sm font-extrabold uppercase py-2 border-b border-stone-100"
+              onClick={() => { onSelectCategory('All', 'Jeans', 'Cargo & Parachute'); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center justify-between text-xs font-black uppercase py-2.5 px-2 hover:bg-gray-50 border-b border-gray-100"
             >
-              <span>MEN</span>
-              <ChevronRight className="w-4 h-4 text-stone-400" />
+              <span className="flex items-center gap-2">
+                <span>🔥 BAGGY & CARGOS</span>
+                <span className="bg-[#CCFF00] text-black text-[8px] font-black px-1 py-0.2">HOT</span>
+              </span>
+              <ChevronRight className="w-4 h-4 text-gray-400" />
+            </button>
+            <button 
+              onClick={() => { onSelectCategory('All', 'Jeans', 'Korean Wide Leg'); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center justify-between text-xs font-black uppercase py-2.5 px-2 hover:bg-gray-50 border-b border-gray-100"
+            >
+              <span>🇰🇷 KOREAN PANTS</span>
+              <ChevronRight className="w-4 h-4 text-gray-400" />
             </button>
             <button 
               onClick={() => { onSelectCategory('Women'); setIsMobileMenuOpen(false); }}
-              className="w-full flex items-center justify-between text-sm font-extrabold uppercase py-2 border-b border-stone-100"
+              className="w-full flex items-center justify-between text-xs font-black uppercase py-2.5 px-2 hover:bg-gray-50 border-b border-gray-100"
             >
-              <span>WOMEN</span>
-              <ChevronRight className="w-4 h-4 text-stone-400" />
+              <span>WOMEN'S COLLECTION</span>
+              <ChevronRight className="w-4 h-4 text-gray-400" />
             </button>
             <button 
-              onClick={() => { onSelectCategory('All', 'Jeans', 'Straight'); setIsMobileMenuOpen(false); }}
-              className="w-full flex items-center justify-between text-sm font-extrabold uppercase py-2 border-b border-stone-100"
+              onClick={() => { onSelectCategory('Men'); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center justify-between text-xs font-black uppercase py-2.5 px-2 hover:bg-gray-50 border-b border-gray-100"
             >
-              <span>501® & ICONS</span>
-              <ChevronRight className="w-4 h-4 text-stone-400" />
+              <span>MEN'S COLLECTION</span>
+              <ChevronRight className="w-4 h-4 text-gray-400" />
             </button>
             <button 
-              onClick={() => { onSelectCategory('All', 'Jackets'); setIsMobileMenuOpen(false); }}
-              className="w-full flex items-center justify-between text-sm font-extrabold uppercase py-2 border-b border-stone-100"
+              onClick={() => { onSelectCategory('Women', 'Shirts & Tops', 'Corset & Tops'); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center justify-between text-xs font-black uppercase py-2.5 px-2 hover:bg-gray-50 border-b border-gray-100"
             >
-              <span>JACKETS & TOPS</span>
-              <ChevronRight className="w-4 h-4 text-stone-400" />
+              <span>CORSETS & TOPS</span>
+              <ChevronRight className="w-4 h-4 text-gray-400" />
+            </button>
+            <button 
+              onClick={() => { onSelectCategory('All', 'Jeans'); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center justify-between text-xs font-black uppercase py-2.5 px-2 hover:bg-gray-50 border-b border-gray-100 text-[#E11D48]"
+            >
+              <span>⚡ SALE FLAT 40% OFF</span>
+              <ChevronRight className="w-4 h-4 text-[#E11D48]" />
             </button>
             <button 
               onClick={() => { onOpenFitGuide(); setIsMobileMenuOpen(false); }}
-              className="w-full flex items-center justify-between text-sm font-bold uppercase py-2 border-b border-stone-100 text-stone-700"
+              className="w-full flex items-center justify-between text-xs font-black uppercase py-2.5 px-2 hover:bg-gray-50 border-b border-gray-100 text-gray-700"
             >
-              <span>DENIM FIT GUIDE</span>
-              <ChevronRight className="w-4 h-4 text-stone-400" />
+              <span className="flex items-center gap-2">
+                <HelpCircle className="w-3.5 h-3.5 text-gray-500" />
+                <span>DENIM FIT GUIDE</span>
+              </span>
+              <ChevronRight className="w-4 h-4 text-gray-400" />
             </button>
           </div>
 
           <div className="pt-2 flex flex-col space-y-2">
             <button
               onClick={() => { onOpenCustomizer(); setIsMobileMenuOpen(false); }}
-              className="w-full py-2.5 bg-stone-900 text-white text-xs font-bold uppercase tracking-wider rounded-xs flex items-center justify-center space-x-2"
+              className="w-full py-3 bg-black text-white text-[11px] font-black uppercase tracking-widest flex items-center justify-center space-x-2 border border-gray-800"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>CUSTOMIZE THIS BRAND</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#CCFF00]" />
+              <span>LAUNCH CUSTOM LAB</span>
             </button>
           </div>
         </div>
