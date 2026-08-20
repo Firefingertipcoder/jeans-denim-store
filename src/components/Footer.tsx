@@ -223,8 +223,10 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom Legal & Copyright matching Sleek Interface */}
         <div className="mt-14 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
-          <div className="text-[11px] font-bold uppercase tracking-widest">
-            © {new Date().getFullYear()} {config.brandName || "RAW & CO."}. ALL RIGHTS RESERVED.
+          <div className="text-[11px] font-bold uppercase tracking-widest flex items-center gap-2">
+            <span>© {new Date().getFullYear()} {config.brandName || "FREAKINS"}. ALL RIGHTS RESERVED.</span>
+            <span className="text-gray-600">|</span>
+            <span className="text-gray-400">DESIGNED BY S&S PARTNERS</span>
           </div>
 
           <div className="flex items-center space-x-6 text-[10px] font-bold uppercase tracking-widest">

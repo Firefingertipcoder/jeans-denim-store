@@ -1,6 +1,6 @@
 {
-  "name": "Denim Brand Storefront and Customizer",
-  "description": "Authentic, customizable denim e-commerce website inspired by Levi's India, featuring live visual editing, interactive fit guide, mega-menu, cart drawer, and responsive denim catalog.",
+  "name": "Freakins Denim & Streetwear Storefront",
+  "description": "High-performance contemporary denim & streetwear e-commerce web application featuring live visual customization, interactive fit guides, mega-menu, cart drawer, and responsive denim catalog.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
